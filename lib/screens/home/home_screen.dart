@@ -10,9 +10,7 @@ class HomeScreen extends StatelessWidget {
     final total = context.watch<SaleProvider>().totalSales;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('DigitalStock Home'),
-      ),
+      appBar: AppBar(title: const Text('DigitalStock Home')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,9 +19,9 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                context.read<SaleProvider>().addSale(150.0);
+                Navigator.pushNamed(context, '/items');
               },
-              child: const Text('Simulate Sale'),
+              child: const Text('Go to Item List'),
             ),
           ],
         ),
