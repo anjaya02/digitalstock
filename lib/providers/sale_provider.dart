@@ -1,17 +1,37 @@
 import 'package:flutter/foundation.dart';
+import '../models/sale.dart';
+import '../models/payment_method.dart';
 
 class SaleProvider with ChangeNotifier {
-  double _totalSales = 0;
+  final List<Sale> _sales = [];
 
-  double get totalSales => _totalSales;
+  List<Sale> get sales => [..._sales];
 
-  void addSale(double amount) {
-    _totalSales += amount;
+  // ── Aggregates ────────────────────────────────────────────────────────────
+  double get todayTotal => _sales
+      .where((s) =>
+          DateTime.now().difference(s.timestamp).inDays == 0)
+      .fold(0.0, (sum, s) => sum + s.total);
+
+  Map<PaymentMethod, double> get todayByMethod {
+    return {
+      for (var m in PaymentMethod.values)
+        m: _sales
+            .where((s) =>
+                DateTime.now().difference(s.timestamp).inDays == 0 &&
+                s.method == m)
+            .fold(0.0, (sum, s) => sum + s.total)
+    };
+  }
+
+  // ── Mutations ─────────────────────────────────────────────────────────────
+  void addSale(Sale sale) {
+    _sales.add(sale);
     notifyListeners();
   }
 
-  void resetSales() {
-    _totalSales = 0;
+  void resetDay() {
+    _sales.clear();
     notifyListeners();
   }
 }
