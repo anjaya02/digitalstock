@@ -68,7 +68,7 @@ class DS {
         ),
       ),
 
-      // Navigation Bar (NO pink indicator)
+      // Bottom Navigation Bar
       navigationBarTheme: navBarTheme(),
     );
   }
@@ -77,26 +77,29 @@ class DS {
   static NavigationBarThemeData navBarTheme() {
     return NavigationBarThemeData(
       backgroundColor: bgWhite,
-      indicatorColor:
-          Colors.transparent, // removes the default Material-3 coloured pill
-      surfaceTintColor: Colors.transparent, // kills elevation tint
+      indicatorColor: cardGrey, // subtle grey pill for selected tab
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
       iconTheme: MaterialStateProperty.resolveWith((states) {
-        return const IconThemeData(color: Colors.black);
+        final selected = states.contains(MaterialState.selected);
+        return IconThemeData(
+          color: selected ? Colors.black : Colors.black54,
+          size: 24,
+        );
       }),
       labelTextStyle: MaterialStateProperty.resolveWith((states) {
+        final selected = states.contains(MaterialState.selected);
         return GoogleFonts.poppins(
-          color: Colors.black,
+          color: selected ? Colors.black : Colors.black54,
           fontSize: 12,
-          fontWeight: states.contains(MaterialState.selected)
-              ? FontWeight.w600
-              : FontWeight.w500,
+          fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
         );
       }),
     );
   }
 
   // ───────────  Re-usable widgets  ───────────
+
   /// Large grey summary card (e.g., "Today’s Sales")
   static Widget summaryCard(String label, String value) => Container(
     width: double.infinity,
@@ -147,7 +150,7 @@ class DS {
     ),
   );
 
-  // ── Back-compat aliases (for older screen code) ──
-  static const Color cardBG = cardGrey; // old colour name
+  // ───────────  Back-compat aliases  ───────────
+  static const Color cardBG = cardGrey;
   static Widget paymentBox(String l, String v) => outlineBox(l, v);
 }
