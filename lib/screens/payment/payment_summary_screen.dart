@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../models/sale.dart';
-import '../../ui/design_system.dart';
 
 class PaymentSummaryScreen extends StatelessWidget {
   const PaymentSummaryScreen({super.key});

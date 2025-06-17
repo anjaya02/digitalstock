@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'app.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables from root .env file
+  // await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: 'assets/config/.env');
+
+
+  // Initialize Supabase with values from .env
   await Supabase.initialize(
-    url: 'https://YOUR-PROJECT.supabase.co',
-    anonKey: 'public-anon-key',
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+
+  print("SUPABASE_URL = ${dotenv.env['SUPABASE_URL']}");
+
   runApp(const DigitalStockApp());
 }

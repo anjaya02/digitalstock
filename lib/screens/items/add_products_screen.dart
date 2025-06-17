@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
 import '../../providers/settings_provider.dart';
-import '../../ui/design_system.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});

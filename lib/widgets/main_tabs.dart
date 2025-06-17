@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pos/screens/settings/settings_screen.dart';
 
-import '../routes/app_routes.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/reports/reports_screen.dart';
-import '../ui/design_system.dart';
 import '../screens/sales/sales_hub_screen.dart';
 
 /// Root scaffold with a persistent bottom NavigationBar.

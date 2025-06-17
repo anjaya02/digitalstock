@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../providers/settings_provider.dart';
+import '../../providers/profile_provider.dart';
+import '../auth/login_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -9,12 +12,28 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
+    final profile = context.watch<ProfileProvider>();
+    final user = Supabase.instance.client.auth.currentUser;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: [
-          // ── Language toggle ──────────────────────────────────────────────
+          // Account header
+          if (user != null)
+            ListTile(
+              leading: const Icon(Icons.account_circle, size: 40),
+              title: Text(
+                profile.displayName?.isNotEmpty == true
+                    ? profile.displayName!
+                    : (user.email ?? user.phone ?? ''),
+              ),
+              subtitle: const Text('Signed in'),
+            ),
+
+          const Divider(height: 0),
+
+          // Language toggle
           SwitchListTile(
             title: const Text('සිංහල / English'),
             value: settings.language == 'si',
@@ -24,19 +43,18 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
 
-          // ── Manual Sync ─────────────────────────────────────────────────
+          // Manual sync
           ListTile(
             leading: const Icon(Icons.sync),
             title: const Text('Manual Sync'),
             onTap: () {
-              // TODO: start sync logic here
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(const SnackBar(content: Text('Sync started…')));
             },
           ),
 
-          // ── Bluetooth Printer ───────────────────────────────────────────
+          // Bluetooth printer placeholder
           ListTile(
             leading: const Icon(Icons.print),
             title: const Text('Bluetooth Printer'),
@@ -60,18 +78,33 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
 
-          // ── About DigitalStock ──────────────────────────────────────────
+          // About
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('About DigitalStock'),
             onTap: () => _showAbout(context),
+          ),
+
+          // Sign-out
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sign out'),
+            onTap: () async {
+              await Supabase.instance.client.auth.signOut();
+
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (_) => false,
+                );
+              }
+            },
           ),
         ],
       ),
     );
   }
 
-  // ── About Dialog ───────────────────────────────────────────────────────
   void _showAbout(BuildContext context) {
     showDialog(
       context: context,

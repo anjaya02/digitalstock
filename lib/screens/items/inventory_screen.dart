@@ -22,10 +22,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final filtered = _search.isEmpty
         ? items
         : items
-              .where(
-                (i) => i.name.toLowerCase().contains(_search.toLowerCase()),
-              )
-              .toList();
+            .where((i) => i.name.toLowerCase().contains(_search.toLowerCase()))
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -62,10 +60,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               itemCount: filtered.length,
               separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (_, i) {
-                final it = filtered[i];
-                return _ItemRow(item: it);
-              },
+              itemBuilder: (_, i) => _ItemRow(item: filtered[i]),
             ),
           ),
         ],
@@ -80,7 +75,8 @@ class _ItemRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lowStock = item.stock != null && item.stock! <= 2;
+    final lowStock = item.stock <= 2;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -99,10 +95,11 @@ class _ItemRow extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Stock: ${item.stock ?? '-'}',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                      'Stock: ${item.stock}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.grey),
                     ),
                     if (lowStock)
                       Container(
@@ -126,12 +123,9 @@ class _ItemRow extends StatelessWidget {
             ),
           ),
           // price
-          Text(
-            'Rs ${item.price.toStringAsFixed(0)}',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          Text('Rs ${item.price.toStringAsFixed(0)}',
+              style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(width: 8),
-          // edit / delete icons
           IconButton(
             icon: const Icon(Icons.edit, size: 20),
             onPressed: () {
@@ -140,9 +134,8 @@ class _ItemRow extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.delete, size: 20),
-            onPressed: () {
-              context.read<ItemProvider>().deleteItem(item.id);
-            },
+            onPressed: () =>
+                context.read<ItemProvider>().deleteItem(item.id),
           ),
         ],
       ),

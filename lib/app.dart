@@ -3,12 +3,15 @@ import 'package:provider/provider.dart';
 
 import 'ui/design_system.dart';
 import 'routes/app_routes.dart';
-import 'widgets/main_tabs.dart';
+// import 'widgets/main_tabs.dart';
+import 'startup_gate.dart';
 
 import 'providers/item_provider.dart';
 import 'providers/sale_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/reports_provider.dart';
+import 'providers/profile_provider.dart';
+import 'widgets/auth_state_listener.dart';
 
 class DigitalStockApp extends StatelessWidget {
   const DigitalStockApp({super.key});
@@ -18,24 +21,38 @@ class DigitalStockApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ItemProvider()),
-        ChangeNotifierProvider(create: (_) => SaleProvider()),
+
+        ChangeNotifierProxyProvider<ItemProvider, SaleProvider>(
+          create: (context) =>
+              SaleProvider(Provider.of<ItemProvider>(context, listen: false)),
+          update: (context, itemProv, prev) => prev ?? SaleProvider(itemProv),
+        ),
+
         ChangeNotifierProxyProvider<SaleProvider, ReportsProvider>(
-          create: (context) => ReportsProvider(context.read<SaleProvider>()),
+          create: (context) => ReportsProvider(
+            Provider.of<SaleProvider>(context, listen: false),
+          ),
           update: (context, saleProv, _) => ReportsProvider(saleProv),
         ),
-        ChangeNotifierProvider(create: (_) => SettingsProvider()),
-      ],
-      child: MaterialApp(
-        title: 'DigitalStock',
-        debugShowCheckedModeBanner: false,
-        theme: DS.theme(),
 
-        // ───── ONLY THIS route map; NO `home:` property ─────
-        initialRoute: '/',
-        routes: {
-          '/': (_) => const MainTabs(), // root → the tab scaffold
-          ...AppRoutes.routes, // every other page
-        },
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()), // ✅ profile
+      ],
+      child: AuthStateListener(
+        child: MaterialApp(
+          title: 'DigitalStock',
+          debugShowCheckedModeBanner: false,
+          theme: DS.theme(),
+
+          home: const StartupGate(),
+
+          routes: {
+            ...AppRoutes.routes,
+            // Optionally
+            // '/main': (_) => const MainTabs(),
+            // '/login': (_) => const LoginScreen(),
+          },
+        ),
       ),
     );
   }

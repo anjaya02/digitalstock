@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos/screens/items/add_products_screen.dart';
 
-import '../screens/items/item_list_screen.dart';
 import '../screens/sales/realtime_sale_screen.dart';
 import '../screens/sales/end_of_day_screen.dart';
 import '../screens/payment/payment_summary_screen.dart';
