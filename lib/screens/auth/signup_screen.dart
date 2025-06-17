@@ -13,26 +13,27 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _emailCtrl    = TextEditingController();
-  final _passCtrl     = TextEditingController();
-  final _confirmCtrl  = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  final _confirmCtrl = TextEditingController();
 
-  bool   _loading = false;
+  bool _loading = false;
   String? _error;
 
+  // ──────────────────────────────────────────────────────────
   Future<void> _signUp() async {
     setState(() {
       _loading = true;
-      _error   = null;
+      _error = null;
     });
 
-    final email    = _emailCtrl.text.trim();
-    final pass     = _passCtrl.text;
-    final confirm  = _confirmCtrl.text;
+    final email = _emailCtrl.text.trim();
+    final pass = _passCtrl.text;
+    final confirm = _confirmCtrl.text;
 
     if (pass != confirm) {
       setState(() {
-        _error   = 'Passwords do not match';
+        _error = 'Passwords do not match';
         _loading = false;
       });
       return;
@@ -44,17 +45,10 @@ class _SignupScreenState extends State<SignupScreen> {
         password: pass,
       );
 
-      // create empty profile row
-      if (res.user != null) {
-        await Supabase.instance.client.from('profiles').insert({
-          'id'          : res.user!.id,
-          'display_name': '',
-        });
-      }
-
-      // go to app
+      // ── App navigation ────────────────────────────────────
       if (res.user != null && mounted) {
-        context.read<ProfileProvider>().loadProfile();
+        // Profile row already exists thanks to DB trigger
+        await context.read<ProfileProvider>().loadProfile();
 
         Navigator.pushReplacement(
           context,
@@ -68,7 +62,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  // ───────────────────────────────────────────────────
+  // ──────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
