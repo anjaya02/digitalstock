@@ -38,6 +38,9 @@ dependencies:
   pdf: ^3.11.3
   printing: ^5.14.2
   google_fonts: ^6.2.1
+  uuid: ^4.5.1
+  supabase_flutter: ^2.9.1
+  lottie: ^3.3.1
   # bluetooth_print: ^4.3.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +75,9 @@ flutter:
     - assets/images/logo_only.png
     - assets/images/logo-icon.png
     - assets/images/splash.png
+    - assets/lottie/cashier.json
+    - assets/lottie/inventory.json
+    - assets/lottie/report.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
