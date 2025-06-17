@@ -29,23 +29,38 @@ class SettingsScreen extends StatelessWidget {
             leading: const Icon(Icons.sync),
             title: const Text('Manual Sync'),
             onTap: () {
-              // TODO: start sync
+              // TODO: start sync logic here
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(const SnackBar(content: Text('Sync started…')));
             },
           ),
 
-          // ── Bluetooth Printer ──────────────────────────────────────────
+          // ── Bluetooth Printer ───────────────────────────────────────────
           ListTile(
             leading: const Icon(Icons.print),
             title: const Text('Bluetooth Printer'),
             onTap: () {
-              // TODO: open printer picker
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text('Coming soon'),
+                  content: const Text(
+                    'Bluetooth printer integration is not available in this '
+                    'version of DigitalStock.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
 
-          // ── About DigitalStock (custom dialog) ─────────────────────────
+          // ── About DigitalStock ──────────────────────────────────────────
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('About DigitalStock'),
@@ -56,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  // ---------------------------------------------------------------------
+  // ── About Dialog ───────────────────────────────────────────────────────
   void _showAbout(BuildContext context) {
     showDialog(
       context: context,
