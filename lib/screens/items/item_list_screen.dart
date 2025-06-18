@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
 import '../../ui/design_system.dart';
+import 'add_products_screen.dart'; 
 
 class ItemListScreen extends StatefulWidget {
   const ItemListScreen({super.key});
@@ -18,6 +19,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
   String _stockSort = 'None';      // None / Low → High / High → Low
   String _category = 'All';        // placeholder until category is added
 
+  // ────────────────────────── helpers ──────────────────────────
   List<Item> _applyFilters(List<Item> source) {
     var out = source;
     if (_search.isNotEmpty) {
@@ -37,6 +39,46 @@ class _ItemListScreenState extends State<ItemListScreen> {
     return out;
   }
 
+  Future<void> _openAddItem([Item? existing]) async {
+    // Push the re-usable AddProductScreen; await result to refresh list
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => AddProductScreen(existing: existing)),
+    );
+    setState(() => _selected = null); // clear any previous selection
+  }
+
+  Future<void> _adjustStockDialog(Item item) async {
+    final ctrl = TextEditingController(text: item.stock.toString());
+    final newStock = await showDialog<int>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Adjust Stock'),
+        content: TextField(
+          controller: ctrl,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'New stock value'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(context, int.tryParse(ctrl.text.trim())),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    if (newStock != null) {
+      context.read<ItemProvider>().updateStock(item.id, newStock);
+      setState(() => _selected = null);
+    }
+  }
+
+  // ───────────────────────────── UI ─────────────────────────────
   @override
   Widget build(BuildContext context) {
     final items = _applyFilters(context.watch<ItemProvider>().items);
@@ -47,9 +89,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add, size: 28),
-            onPressed: () {
-              // TODO: open add-item dialog / screen
-            },
+            onPressed: _openAddItem,      // ← add-item screen
           )
         ],
       ),
@@ -151,25 +191,29 @@ class _ItemListScreenState extends State<ItemListScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _selected == null ? null : () {},
+                    onPressed: _selected == null
+                        ? null
+                        : () => _openAddItem(_selected), // edit flow
                     child: const Text('Edit item'),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _selected == null ? null : () {},
+                    onPressed: _selected == null
+                        ? null
+                        : () => _adjustStockDialog(_selected!),
                     child: const Text('Adjust stock'),
                   ),
                 ),
               ],
             ),
           ),
-          // Big add-new
+          // Big add-new button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: FilledButton(
-              onPressed: () {},
+              onPressed: _openAddItem,
               child: const Text('Add new item'),
             ),
           ),
@@ -178,7 +222,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
           const Padding(
             padding: EdgeInsets.only(bottom: 16),
             child: Text(
-              'Items sold with no stock entered',
+              'Items can still be sold even with zero stock',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),
             ),

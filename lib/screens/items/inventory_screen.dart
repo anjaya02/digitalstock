@@ -1,10 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
-import '../../routes/app_routes.dart';
+// import '../../routes/app_routes.dart';
 import '../../ui/design_system.dart';
+import 'add_products_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -15,6 +17,31 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   String _search = '';
+
+  Future<void> _adjustStockDialog(BuildContext context, Item item) async {
+    final ctrl = TextEditingController(text: item.stock.toString());
+    final newStock = await showDialog<int>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Adjust Stock'),
+        content: TextField(
+          controller: ctrl,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'New stock value'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, int.tryParse(ctrl.text)),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    if (newStock != null) {
+      context.read<ItemProvider>().updateStock(item.id, newStock);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +58,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.addProduct),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AddProductScreen()),
+            ),
           ),
         ],
       ),
@@ -60,7 +90,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               itemCount: filtered.length,
               separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (_, i) => _ItemRow(item: filtered[i]),
+              itemBuilder: (_, i) => _ItemRow(
+                item: filtered[i],
+                onEdit: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => AddProductScreen(existing: filtered[i])),
+                ),
+                onAdjust: () => _adjustStockDialog(context, filtered[i]),
+              ),
             ),
           ),
         ],
@@ -70,8 +107,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
 }
 
 class _ItemRow extends StatelessWidget {
-  const _ItemRow({required this.item});
+  const _ItemRow({required this.item, required this.onEdit, required this.onAdjust});
   final Item item;
+  final VoidCallback onEdit;
+  final VoidCallback onAdjust;
 
   @override
   Widget build(BuildContext context) {
@@ -128,14 +167,15 @@ class _ItemRow extends StatelessWidget {
           const SizedBox(width: 8),
           IconButton(
             icon: const Icon(Icons.edit, size: 20),
-            onPressed: () {
-              // TODO: edit flow
-            },
+            onPressed: onEdit,
+          ),
+          IconButton(
+            icon: const Icon(Icons.inventory, size: 20),
+            onPressed: onAdjust,
           ),
           IconButton(
             icon: const Icon(Icons.delete, size: 20),
-            onPressed: () =>
-                context.read<ItemProvider>().deleteItem(item.id),
+            onPressed: () => context.read<ItemProvider>().deleteItem(item.id),
           ),
         ],
       ),
