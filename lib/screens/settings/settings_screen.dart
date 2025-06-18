@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../providers/settings_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../auth/login_screen.dart';
 
@@ -11,7 +9,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsProvider>();
     final profile = context.watch<ProfileProvider>();
     final user = Supabase.instance.client.auth.currentUser;
 
@@ -32,16 +29,6 @@ class SettingsScreen extends StatelessWidget {
             ),
 
           const Divider(height: 0),
-
-          // Language toggle
-          SwitchListTile(
-            title: const Text('සිංහල / English'),
-            value: settings.language == 'si',
-            onChanged: (_) {
-              final next = settings.language == 'si' ? 'en' : 'si';
-              context.read<SettingsProvider>().switchLanguage(next);
-            },
-          ),
 
           // Manual sync
           ListTile(
