@@ -1,14 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
-import '../../providers/settings_provider.dart';
 
-/// Re‑usable screen for *adding* **or** *editing* a product.
-/// If [existing] is supplied we pre‑fill the form and update the record
+/// Re-usable screen for *adding* **or** *editing* a product.
+/// If [existing] is supplied we pre-fill the form and update the record
 /// instead of creating a new `Item`.
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key, this.existing});
@@ -27,11 +25,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     super.initState();
-    _nameCtrl  = TextEditingController(text: widget.existing?.name ?? '');
+    _nameCtrl = TextEditingController(text: widget.existing?.name ?? '');
     _priceCtrl = TextEditingController(
-      text: widget.existing != null ? widget.existing!.price.toString() : '');
+      text: widget.existing != null ? widget.existing!.price.toString() : '',
+    );
     _stockCtrl = TextEditingController(
-      text: widget.existing != null ? widget.existing!.stock.toString() : '');
+      text: widget.existing != null ? widget.existing!.stock.toString() : '',
+    );
   }
 
   @override
@@ -44,13 +44,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final langSi = context.watch<SettingsProvider>().language == 'si';
-    String tr(String en, String si) => langSi ? si : en;
     final editing = widget.existing != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(tr(editing ? 'Edit Product' : 'Add Product',
-          editing ? 'භාණ්ඩ සංස්කරණය' : 'භාණ්ඩ එකතු කරනවා'))),
+      appBar: AppBar(title: Text(editing ? 'Edit Product' : 'Add Product')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -59,36 +56,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
             children: [
               TextFormField(
                 controller: _nameCtrl,
-                decoration: InputDecoration(
-                  labelText: tr('Product Name', 'භාණ්ඩ නාමය'),
-                  prefixIcon: const Icon(Icons.comment),
+                decoration: const InputDecoration(
+                  labelText: 'Product Name',
+                  prefixIcon: Icon(Icons.comment),
                 ),
-                validator: (v) => v == null || v.trim().isEmpty
-                    ? tr('Required', 'අවශ්‍යයි')
-                    : null,
+                validator: (v) =>
+                    v == null || v.trim().isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _priceCtrl,
-                decoration: InputDecoration(
-                  labelText: tr('Selling Price (Rs.)', 'මිල (රු.)'),
-                  prefixIcon: const Icon(Icons.attach_money),
+                decoration: const InputDecoration(
+                  labelText: 'Selling Price (Rs.)',
+                  prefixIcon: Icon(Icons.attach_money),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (v) {
                   final val = double.tryParse(v ?? '');
-                  if (val == null || val <= 0) {
-                    return tr('Enter valid price', 'මිල හරියට ඇතුළු කරන්න');
-                  }
+                  if (val == null || val <= 0) return 'Enter valid price';
                   return null;
                 },
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _stockCtrl,
-                decoration: InputDecoration(
-                  labelText: tr('Stock (optional)', 'තොගය (අමතර)'),
-                  prefixIcon: const Icon(Icons.inventory),
+                decoration: const InputDecoration(
+                  labelText: 'Stock (optional)',
+                  prefixIcon: Icon(Icons.inventory),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -118,19 +112,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Navigator.pop(context, item);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(tr(
-                          editing ? 'Product updated' : 'Product saved',
-                          editing ? 'භාණ්ඩය යාවත්කාලින කරන ලදි' : 'භාණ්ඩය සුරකින ලදි')),
+                      content: Text(
+                        editing ? 'Product updated' : 'Product saved',
+                      ),
                     ),
                   );
                 },
-                child: Text(tr(editing ? 'Update' : 'Save',
-                    editing ? 'යාවත්කාලින' : 'සුරකින්න')),
+                child: Text(editing ? 'Update' : 'Save'),
               ),
               const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text(tr('Cancel', 'අවලංගු')),
+                child: const Text('Cancel'),
               ),
             ],
           ),

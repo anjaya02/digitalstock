@@ -3,8 +3,8 @@ import '../models/item.dart';
 
 class ItemProvider with ChangeNotifier {
   final List<Item> _items = [
-    Item(id: '1', name: 'Bun', price: 30.0, stock: 50),
-    Item(id: '2', name: 'Milk Packet', price: 100.0, stock: 20),
+    Item(id: '1', name: 'Bun', price: 60.0, stock: 50),
+    Item(id: '2', name: 'Milk Packet', price: 400.0, stock: 20),
     Item(id: '3', name: 'Notebook', price: 150.0, stock: 10),
   ];
 
