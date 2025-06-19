@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/item.dart';
-// import '../../models/sale.dart';
 import '../../providers/sale_provider.dart';
 import '../../routes/app_routes.dart';
 import '../../ui/design_system.dart';

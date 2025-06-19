@@ -17,7 +17,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
   String _search = '';
   Item? _selected;                 // tapped row
   String _stockSort = 'None';      // None / Low → High / High → Low
-  String _category = 'All';        // placeholder until category is added
+  String _category = 'All';        
 
   // ────────────────────────── helpers ──────────────────────────
   List<Item> _applyFilters(List<Item> source) {
@@ -45,7 +45,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
       context,
       MaterialPageRoute(builder: (_) => AddProductScreen(existing: existing)),
     );
-    setState(() => _selected = null); // clear any previous selection
+    setState(() => _selected = null);
   }
 
   Future<void> _adjustStockDialog(Item item) async {
@@ -89,7 +89,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add, size: 28),
-            onPressed: _openAddItem,      // ← add-item screen
+            onPressed: _openAddItem,     
           )
         ],
       ),
@@ -193,7 +193,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
                   child: ElevatedButton(
                     onPressed: _selected == null
                         ? null
-                        : () => _openAddItem(_selected), // edit flow
+                        : () => _openAddItem(_selected), 
                     child: const Text('Edit item'),
                   ),
                 ),

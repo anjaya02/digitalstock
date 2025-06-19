@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart'; // ← NEW
+import 'package:uuid/uuid.dart'; 
 
 import '../models/sale.dart';
 import '../models/payment_method.dart';
@@ -71,7 +71,6 @@ class SaleProvider with ChangeNotifier {
           );
     } catch (e) {
       debugPrint('Supabase insert failed: $e');
-      // TODO: offline queue & retry in production
     }
   }
 
@@ -84,7 +83,7 @@ class SaleProvider with ChangeNotifier {
         .from('sales')
         .select(
           'id, timestamp, payment_method, total, '
-          'sale_items(item_id, item_name, qty, price_each)', // no alias
+          'sale_items(item_id, item_name, qty, price_each)', 
         )
         .eq('user_id', uid);
 

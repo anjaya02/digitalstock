@@ -17,7 +17,7 @@ class ProfileProvider with ChangeNotifier {
         .from('profiles')
         .select()
         .eq('id', userId)
-        .maybeSingle();                 // ← safe when 0 rows
+        .maybeSingle();                 
 
     if (data == null) {
       // first time this user logs in – create an empty profile row

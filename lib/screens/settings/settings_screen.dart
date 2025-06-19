@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../providers/settings_provider.dart';
 import '../../providers/profile_provider.dart';
-import '../../providers/sale_provider.dart'; // ← NEW
+import '../../providers/sale_provider.dart';
 import '../auth/login_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -12,7 +11,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsProvider>();
     final profile = context.watch<ProfileProvider>();
     final user = Supabase.instance.client.auth.currentUser;
 
@@ -32,14 +30,6 @@ class SettingsScreen extends StatelessWidget {
             ),
           const Divider(height: 0),
 
-          SwitchListTile(
-            title: const Text('සිංහල / English'),
-            value: settings.language == 'si',
-            onChanged: (_) {
-              final next = settings.language == 'si' ? 'en' : 'si';
-              context.read<SettingsProvider>().switchLanguage(next);
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.sync),
             title: const Text('Manual Sync'),
@@ -72,13 +62,12 @@ class SettingsScreen extends StatelessWidget {
             title: const Text('About DigitalStock'),
             onTap: () => _showAbout(context),
           ),
-          // ───────────── Sign-out ─────────────
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sign out'),
             onTap: () async {
               await Supabase.instance.client.auth.signOut();
-              context.read<SaleProvider>().clearCache(); // ← flush data
+              context.read<SaleProvider>().clearCache();
 
               if (context.mounted) {
                 Navigator.of(context).pushAndRemoveUntil(

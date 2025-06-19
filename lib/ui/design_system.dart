@@ -77,7 +77,7 @@ class DS {
   static NavigationBarThemeData navBarTheme() {
     return NavigationBarThemeData(
       backgroundColor: bgWhite,
-      indicatorColor: cardGrey, // subtle grey pill for selected tab
+      indicatorColor: cardGrey, 
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       iconTheme: MaterialStateProperty.resolveWith((states) {

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'ui/design_system.dart';
 import 'routes/app_routes.dart';
-// import 'widgets/main_tabs.dart';
 import 'startup_gate.dart';
 
 import 'providers/item_provider.dart';
@@ -48,9 +47,7 @@ class DigitalStockApp extends StatelessWidget {
 
           routes: {
             ...AppRoutes.routes,
-            // Optionally
-            // '/main': (_) => const MainTabs(),
-            // '/login': (_) => const LoginScreen(),
+           
           },
         ),
       ),

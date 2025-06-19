@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
-// import '../../routes/app_routes.dart';
 import '../../ui/design_system.dart';
 import 'add_products_screen.dart';
 

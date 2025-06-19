@@ -5,9 +5,6 @@ import 'package:uuid/uuid.dart';
 import '../../models/item.dart';
 import '../../providers/item_provider.dart';
 
-/// Re-usable screen for *adding* **or** *editing* a product.
-/// If [existing] is supplied we pre-fill the form and update the record
-/// instead of creating a new `Item`.
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key, this.existing});
   final Item? existing;

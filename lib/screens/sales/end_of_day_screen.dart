@@ -107,7 +107,7 @@ class _EndOfDayScreenState extends State<EndOfDayScreen> {
     // reset counts & draft so cashier can log next method
     _qty.updateAll((_, __) => 0);
     await _clearDraft();
-    setState(() {}); // rebuild buttons
+    setState(() {}); 
   }
 
   // ───────────────────────── UI ─────────────────────────

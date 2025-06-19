@@ -5,7 +5,7 @@ import '../screens/sales/realtime_sale_screen.dart';
 import '../screens/sales/end_of_day_screen.dart';
 import '../screens/payment/payment_summary_screen.dart';
 import '../screens/settings/settings_screen.dart';
-import '../screens/items/inventory_screen.dart'; // renamed
+import '../screens/items/inventory_screen.dart'; 
 
 class AppRoutes {
   static const String items = '/items';

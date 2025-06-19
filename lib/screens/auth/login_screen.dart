@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email   : _emailCtrl.text.trim(),
         password: _passCtrl.text,
       );
-      await _goToMainIfLoggedIn();                // ← note: await
+      await _goToMainIfLoggedIn();              
     } on AuthException catch (e) {
       setState(() => _error = e.message);
     } finally {
