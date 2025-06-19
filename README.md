@@ -1,6 +1,6 @@
-# DigitalStock – Mobile POS for Sri‑Lankan Corner Shops
+# DigitalStock – Mobile POS for Sri-Lankan Corner Shops
 
-A lightweight, bilingual (EN/සිං) Flutter application that turns any Android phone into an offline‑first point‑of‑sale system.  Core focus: real‑time & day‑end sales entry, automatic stock deduction, receipt/PDF export, and Supabase‑backed cloud sync — with per‑user data isolation.
+A lightweight English-only Flutter application that turns any Android phone into an offline-first point-of-sale system. Core focus: real-time & day-end sales entry, automatic stock deduction, receipt/PDF export, and Supabase-backed cloud sync — with per-user data isolation.
 
 ---
 
@@ -8,17 +8,17 @@ A lightweight, bilingual (EN/සිං) Flutter application that turns any Andro
 
 | Tier                                | Free                          | Premium   |
 | ----------------------------------- | ----------------------------- | --------- |
-| Items & turnover                    | ≤ 1 000 items / Rs 100 000 mo | Unlimited |
-| Real‑time & End‑of‑day modes        | ✅                             | ✅         |
+| Items & turnover                    | ≤ 1 000 items / Rs 100 000 mo | Unlimited |
+| Real-time & End-of-day modes        | ✅                             | ✅         |
 | Cash / QR / Card tracking           | ✅                             | ✅         |
-| Offline‑first + background sync     | ✅                             | ✅         |
+| Offline-first + background sync     | ✅                             | ✅         |
 | Automatic stock deduction           | ✅                             | ✅         |
 | Daily / Weekly PDF                  | ✅                             | ✅         |
-| Low‑stock alerts                    | ✖️                            | ✅         |
-| Pie‑chart dashboard / custom ranges | ✖️                            | ✅         |
+| Low-stock alerts                    | ✖️                            | ✅         |
+| Pie-chart dashboard / custom ranges | ✖️                            | ✅         |
 | WhatsApp receipt sharing            | ✖️                            | ✅         |
-| Staff log‑ins                       | ✖️                            | ✅         |
-| SMS end‑of‑day summaries            | ✖️                            | ✅         |
+| Staff log-ins                       | ✖️                            | ✅         |
+| SMS end-of-day summaries            | ✖️                            | ✅         |
 
 ---
 
@@ -26,11 +26,11 @@ A lightweight, bilingual (EN/සිං) Flutter application that turns any Andro
 
 | Layer         | Choice                    | Notes                                         |
 | ------------- | ------------------------- | --------------------------------------------- |
-| UI            | **Flutter 3**             | Material 3, Poppins font, Provider state mgmt |
+| UI            | **Flutter 3**             | Material 3, Poppins font, Provider state mgmt |
 | Local storage | SQLite via `sqflite`      | Offline queue & cache                         |
 | Cloud         | **Supabase** (PostgreSQL) | Auth, RLS, realtime, storage                  |
 | PDF/Print     | `pdf`, `printing` pkgs    | Bluetooth printers via SDK placeholder        |
-| Icons         | `flutter_launcher_icons`  | Uses `assets/images/logo‑icon.png`            |
+| Icons         | `flutter_launcher_icons`  | Uses `assets/images/logo-icon.png`            |
 
 Project structure (partial):
 
@@ -49,16 +49,16 @@ assets/
 
 ## 🔧 Prerequisites
 
-1. **Flutter 3.22+** with Android tool‑chain.
+1. **Flutter 3.22+** with Android tool-chain.
 2. A Supabase project *(Free tier is fine)*.
 3. Copy `.env.sample` → `assets/config/.env` and fill:
 
 ```
-SUPABASE_URL=https://<YOUR‑REF>.supabase.co
+SUPABASE_URL=https://<YOUR-REF>.supabase.co
 SUPABASE_ANON_KEY=<public_anon_key>
 ```
 
-4. Enable **Email** provider in Supabase Auth.  Disable email confirmations only if kiosk build.
+4. Enable **Email** provider in Supabase Auth. Disable email confirmations only if kiosk build.
 5. Run the SQL in [`database/schema.sql`](#database-setup) to create tables & RLS.
 
 ---
@@ -91,7 +91,7 @@ create table public.profiles (
   display_name  text
 );
 
--- Row‑level security
+-- Row-level security
 alter table sales       enable row level security;
 alter table sale_items  enable row level security;
 alter table profiles    enable row level security;
@@ -112,7 +112,7 @@ create policy "Users can read/update own profile" on profiles
 
 ```bash
 flutter pub get
-flutter pub run flutter_launcher_icons:main   # one‑time
+flutter pub run flutter_launcher_icons:main   # one-time
 flutter run                                    # debug
 ```
 
@@ -131,16 +131,16 @@ flutter run                                    # debug
 * `SaleProvider.fetchRemote()` downloads *all* sales for current user **after login**.
 * `ReportsProvider` listens to `SaleProvider` → reports & PDFs always include fetched history.
 * Launcher icon generated from `assets/images/logo-icon.png` via *flutter\_launcher\_icons*.
-* First login auto‑creates blank row in `profiles` table (`maybeSingle + insert`).
+* First login auto-creates blank row in `profiles` table (`maybeSingle + insert`).
 * RLS ensures each Supabase query is already scoped by `auth.uid()`.
 
 ---
 
 ## 🎯 Roadmap / TODO
 
-* [ ] Low‑stock push notifications
-* [ ] Multi‑branch syncing
-* [ ] Supplier marketplace plug‑in
+* [ ] Low-stock push notifications
+* [ ] Multi-branch syncing
+* [ ] Supplier marketplace plug-in
 * [ ] PayHere / WebXPay subscription billing
 * [ ] Bluetooth printer integration
 
@@ -148,8 +148,8 @@ flutter run                                    # debug
 
 ## 🤝 Contributing
 
-1. Fork & pull‑request from a feature branch.
-2. Follow Dart `dart format` / `flutter analyze` clean lint.
+1. Fork & pull-request from a feature branch.
+2. Follow Dart `dart format` / `flutter analyze` clean lint.
 3. Explain the problem & solution clearly in the PR.
 
-MIT © 2025 DigitalStock Team
+MIT © 2025 DigitalStock Team
