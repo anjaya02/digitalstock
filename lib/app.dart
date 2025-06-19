@@ -21,34 +21,32 @@ class DigitalStockApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ItemProvider()),
 
+        // ───────── SaleProvider depends on ItemProvider ─────────
         ChangeNotifierProxyProvider<ItemProvider, SaleProvider>(
           create: (context) =>
               SaleProvider(Provider.of<ItemProvider>(context, listen: false)),
           update: (context, itemProv, prev) => prev ?? SaleProvider(itemProv),
         ),
 
+        // ───────── ReportsProvider depends on SaleProvider ─────────
         ChangeNotifierProxyProvider<SaleProvider, ReportsProvider>(
           create: (context) => ReportsProvider(
             Provider.of<SaleProvider>(context, listen: false),
           ),
-          update: (context, saleProv, _) => ReportsProvider(saleProv),
+          update: (context, saleProv, prev) =>
+              prev!..updateSaleProvider(saleProv), // reuse same instance
         ),
 
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
-        ChangeNotifierProvider(create: (_) => ProfileProvider()), // ✅ profile
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
       child: AuthStateListener(
         child: MaterialApp(
           title: 'DigitalStock',
           debugShowCheckedModeBanner: false,
           theme: DS.theme(),
-
           home: const StartupGate(),
-
-          routes: {
-            ...AppRoutes.routes,
-           
-          },
+          routes: {...AppRoutes.routes},
         ),
       ),
     );
